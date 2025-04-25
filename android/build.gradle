@@ -1,3 +1,22 @@
+//configuration to handle namespace issue in the dependencies
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                  def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+                    if (namespace == null && agpVersion >= 7) {
+                        namespace project.group
+                    }
+                // if (!hasProperty('namespace') || namespace == null || namespace.isEmpty()) {
+                //     // Assign a default namespace based on the project name or group
+                //     namespace = project.group.toString() ?: "com.example.${project.name}"
+                // }else if (){
+
+                // }
+            }
+        }
+    }
+}
 allprojects {
     repositories {
         google()
