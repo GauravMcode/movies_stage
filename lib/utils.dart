@@ -45,6 +45,28 @@ Shimmer getLoader(
   );
 }
 
+class CustomButton extends StatelessWidget {
+  const CustomButton(
+      {super.key, required this.onTap, required this.text, required this.icon});
+
+  final VoidCallback onTap;
+  final String text;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white, backgroundColor: Colors.redAccent),
+        icon: Icon(
+          icon,
+          color: Colors.white,
+        ),
+        label: Text(text));
+  }
+}
+
 String getGenre(int id) {
   final Map<int, String> genresMap = {
     28: "Action",

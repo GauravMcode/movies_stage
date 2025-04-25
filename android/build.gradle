@@ -1,22 +1,23 @@
-//configuration to handle namespace issue in the dependencies
+// Remove incorrect Kotlin-style code
+// Fix: configuration to handle namespace issue in the dependencies
 subprojects {
     afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                  def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
-                    if (namespace == null && agpVersion >= 7) {
-                        namespace project.group
-                    }
-                // if (!hasProperty('namespace') || namespace == null || namespace.isEmpty()) {
-                //     // Assign a default namespace based on the project name or group
-                //     namespace = project.group.toString() ?: "com.example.${project.name}"
-                // }else if (){
+        if (project.hasProperty("android")) {
+            def androidExtension = project.extensions.findByName("android")
+            if (androidExtension != null) {
+                androidExtension.compileSdkVersion = 35
+                androidExtension.buildToolsVersion = "35.0.0"
+                androidExtension.ndkVersion = "27.0.12077973"
 
-                // }
+                // Set a default namespace if not already set
+                if (!androidExtension.hasProperty("namespace") || androidExtension.namespace == null) {
+                    androidExtension.namespace = project.group.toString()
+                }
             }
         }
     }
 }
+
 allprojects {
     repositories {
         google()
@@ -27,8 +28,6 @@ allprojects {
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 

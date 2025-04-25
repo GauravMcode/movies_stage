@@ -5,12 +5,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:movies_stage/config/widget_keys.dart';
 import 'package:movies_stage/domain/models/movie.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_bloc.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_events.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/movie_list_events.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/movies_list_bloc.dart';
-import 'package:movies_stage/presentation/movies_list/view/movie_card.dart';
 import 'package:movies_stage/utils.dart';
 
 class MovieDetails extends StatefulWidget {
@@ -229,6 +229,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               }
 
                               return IconButton(
+                                  key: AppWidgetKeys.favIconKey,
                                   onPressed: () {
                                     !state.movies
                                             .map((m) => m.movieId)

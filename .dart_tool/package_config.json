@@ -177,7 +177,7 @@
     },
     {
       "name": "file",
-      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/file-7.0.1",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/file-7.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -204,6 +204,12 @@
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_driver",
+      "rootUri": "file:///Users/gauravmishra/development/flutter/packages/flutter_driver",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_lints",
@@ -236,6 +242,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "fuchsia_remote_debug_protocol",
+      "rootUri": "file:///Users/gauravmishra/development/flutter/packages/fuchsia_remote_debug_protocol",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "glob",
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/glob-2.1.3",
       "packageUri": "lib/",
@@ -264,6 +276,12 @@
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/http_parser-4.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "integration_test",
+      "rootUri": "file:///Users/gauravmishra/development/flutter/packages/integration_test",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "intl",
@@ -423,7 +441,7 @@
     },
     {
       "name": "platform",
-      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/platform-3.1.6",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/platform-3.1.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -438,6 +456,12 @@
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/pool-1.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "process",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/process-5.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "provider",
@@ -560,6 +584,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "sync_http",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/sync_http-0.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "synchronized",
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/synchronized-3.3.0+3",
       "packageUri": "lib/",
@@ -638,6 +668,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "webdriver",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/webdriver-3.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "xdg_directories",
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/xdg_directories-1.1.0",
       "packageUri": "lib/",
@@ -662,7 +698,7 @@
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-04-25T08:22:26.627426Z",
+  "generated": "2025-04-25T17:44:08.646510Z",
   "generator": "pub",
   "generatorVersion": "3.6.2",
   "flutterRoot": "file:///Users/gauravmishra/development/flutter",

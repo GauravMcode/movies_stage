@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_stage/config/routes/app_routes.dart';
+import 'package:movies_stage/config/widget_keys.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_bloc.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_events.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/movie_list_events.dart';
@@ -57,6 +58,7 @@ class _MovieListState extends State<MovieList> {
               return Scaffold(
                 floatingActionButton: FloatingActionButton(
                   onPressed: () async {
+                    context.read<MoviesListBloc>().add(GetMoviesEvent());
                     Navigator.of(context).pushNamed(AppRoutes.moviesSearch);
                   },
                   foregroundColor: Colors.white,
@@ -110,64 +112,92 @@ class _MovieListState extends State<MovieList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Opps! Unable to Fetch Movies.",
+                              "Oops! Unable to Fetch Movies.",
                               style: TextStyle(color: Colors.grey),
                             ),
-                            ElevatedButton.icon(
-                                onPressed: () {
-                                  context
-                                      .read<MoviesListBloc>()
-                                      .add(SwitchToFavEvent());
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.redAccent),
-                                icon: Icon(
-                                  Icons.favorite_border_outlined,
-                                  color: Colors.white,
-                                ),
-                                label: Text("View Favorites"))
+                            CustomButton(
+                              onTap: () {
+                                context
+                                    .read<MoviesListBloc>()
+                                    .add(SwitchToFavEvent());
+                              },
+                              text: "view favorites",
+                              icon: Icons.favorite_border_outlined,
+                            )
                           ],
                         )
-                      : GridView.builder(
-                          // cacheExtent: (state.movies.length / 2) * h * 0.1,
-                          controller: _scrollController,
-                          itemCount: allMoviesState is SwitchToFavState
-                              ? favMoviesState.movies.length
-                              : allMoviesState.movies.length +
-                                  ((allMoviesState is LoadingMovieState) &&
-                                          allMoviesState.page > 1
-                                      ? 2
-                                      : 0),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisExtent: h * 0.35,
-                                  crossAxisSpacing: 2,
-                                  mainAxisSpacing: 2,
-                                  crossAxisCount: 2),
-                          itemBuilder: (context, index) {
-                            if (allMoviesState is! SwitchToFavState &&
-                                index >= allMoviesState.movies.length) {
-                              return getLoader(w: w * 0.4, h: h * 0.2);
-                            }
-                            return InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(
-                                      AppRoutes.movieDetails,
-                                      arguments: {
-                                        'movie':
-                                            allMoviesState is SwitchToFavState
-                                                ? favMoviesState.movies[index]
-                                                : allMoviesState.movies[index]
-                                      });
-                                },
-                                child: MovieCard(
-                                  movie: allMoviesState is SwitchToFavState
-                                      ? favMoviesState.movies[index]
-                                      : allMoviesState.movies[index],
-                                ));
-                          }),
+                      : allMoviesState.movies.isEmpty &&
+                              allMoviesState is! SwitchToFavState &&
+                              allMoviesState is LoadingMovieState
+                          ? Center(child: CircularProgressIndicator())
+                          : favMoviesState.movies.isEmpty &&
+                                  allMoviesState is SwitchToFavState
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Favorite Movies Found\n Add from List",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    CustomButton(
+                                      onTap: () {
+                                        context
+                                            .read<MoviesListBloc>()
+                                            .add(GetMoviesEvent());
+                                      },
+                                      text: "View Movie List",
+                                      icon: Icons.grid_view_sharp,
+                                    )
+                                  ],
+                                )
+                              : GridView.builder(
+                                  // cacheExtent: (state.movies.length / 2) * h * 0.1,
+                                  controller: _scrollController,
+                                  itemCount: allMoviesState is SwitchToFavState
+                                      ? favMoviesState.movies.length
+                                      : allMoviesState.movies.length +
+                                          ((allMoviesState
+                                                      is LoadingMovieState) &&
+                                                  allMoviesState.page > 1
+                                              ? 2
+                                              : 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisExtent: h * 0.35,
+                                          crossAxisSpacing: 2,
+                                          mainAxisSpacing: 2,
+                                          crossAxisCount: 2),
+                                  itemBuilder: (context, index) {
+                                    if (allMoviesState is! SwitchToFavState &&
+                                        index >= allMoviesState.movies.length) {
+                                      return getLoader(w: w * 0.4, h: h * 0.2);
+                                    }
+                                    return InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                              AppRoutes.movieDetails,
+                                              arguments: {
+                                                'movie': allMoviesState
+                                                        is SwitchToFavState
+                                                    ? favMoviesState
+                                                        .movies[index]
+                                                    : allMoviesState
+                                                        .movies[index]
+                                              });
+                                        },
+                                        child: MovieCard(
+                                          key: index == 0
+                                              ? AppWidgetKeys.firstCardKey
+                                              : index == 12
+                                                  ? AppWidgetKeys.otherCardKey
+                                                  : null,
+                                          movie: allMoviesState
+                                                  is SwitchToFavState
+                                              ? favMoviesState.movies[index]
+                                              : allMoviesState.movies[index],
+                                        ));
+                                  }),
                 ),
               );
             },
