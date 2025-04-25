@@ -5,7 +5,7 @@ class FavMoviesRepository {
   static Future<List<Movie>?>getFavMovies() async {
     return await LocalDataProvider().getFavMovies();
   }
-  static  addToFav(Movie movie) async {
+  static Future<Movie> addToFav(Movie movie) async {
     return await LocalDataProvider().saveMovie(movie);
   }
   static removeFromFav(Movie movie) async {

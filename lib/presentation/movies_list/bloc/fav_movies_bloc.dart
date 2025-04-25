@@ -18,16 +18,15 @@ class FavMoviesBloc extends Bloc<FavMoviesEvents, FavMoviesState> {
 
     on<AddFavMovieEvent>((event, emit) async {
       final movies = state.movies;
-      emit(LoadingFavMovieState(movies: movies));
-      movies.add(event.movie);
-      await FavMoviesRepository.addToFav(event.movie);
+      emit(SavingToFav(movies: movies, movieId: event.movie.movieId));
+      final movie = await FavMoviesRepository.addToFav(event.movie);
+      movies.add(movie);
       emit(FetchedFavMovieState(movies: movies));
     });
 
     on<RemoveFavMovieEvent>((event, emit) async {
       final movies = state.movies;
-      emit(LoadingFavMovieState(movies: movies));
-      movies.removeWhere((m) => m.id == event.movie.id);
+      movies.removeWhere((m) => m.movieId == event.movie.movieId);
       await FavMoviesRepository.removeFromFav(event.movie);
       emit(FetchedFavMovieState(movies: movies));
     });

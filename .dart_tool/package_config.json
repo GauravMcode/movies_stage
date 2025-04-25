@@ -266,6 +266,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/intl-0.20.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "io",
       "rootUri": "file:///Users/gauravmishra/.pub-cache/hosted/pub.dev/io-1.0.5",
       "packageUri": "lib/",
@@ -656,7 +662,7 @@
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-04-25T02:53:50.893379Z",
+  "generated": "2025-04-25T08:22:26.627426Z",
   "generator": "pub",
   "generatorVersion": "3.6.2",
   "flutterRoot": "file:///Users/gauravmishra/development/flutter",

@@ -19,4 +19,24 @@ class AllMoviesRepository {
       return {'movies': movies, 'status': res.statusCode, 'message': res.body};
     }
   }
+
+  static Future<Map<String, dynamic>> searchMovieList(String searchTem) async {
+    List<Movie> movies = [];
+    final res = await RemoteDataProvider().fetchSearchMoviesList(searchTem);
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      if ((data)['results'] == null) {
+        return {
+          'movies': movies,
+          'status': 22,
+          'message': data['status_message']
+        };
+        
+      }
+      movies = movieListFromJson(res.body);
+      return {'movies': movies, 'status': 200, 'message': "success"};
+    } else {
+      return {'movies': movies, 'status': res.statusCode, 'message': res.body};
+    }
+  }
 }

@@ -16,6 +16,7 @@ Future<String> fetchImageFromUrlAndConvertToBase64(String imageUrl) async {
   if (response.statusCode == 200) {
     Uint8List bytes = response.bodyBytes;
     String base64String = base64Encode(bytes);
+    print(base64String);
     return base64String;
   } else {
     throw Exception('Failed to load image');
@@ -44,7 +45,7 @@ Shimmer getLoader(
   );
 }
 
-getGenre(int id) {
+String getGenre(int id) {
   final Map<int, String> genresMap = {
     28: "Action",
     12: "Adventure",
@@ -67,5 +68,5 @@ getGenre(int id) {
     37: "Western",
   };
 
-  return genresMap[id];
+  return genresMap[id] ?? "";
 }

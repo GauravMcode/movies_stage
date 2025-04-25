@@ -22,6 +22,22 @@ class RemoteDataProvider {
     print("🔌 Client error: $e");
       return http.Response("connection error", 503);
 
+    } catch (e) {
+      return http.Response(e.toString(), 400);
+    }
+  }
+
+  Future<http.Response> fetchSearchMoviesList(String searchTem) async {
+    try {
+      final res = await http.get(Uri.parse(ApiRoutes.searchMovies + searchTem));
+      return res;
+    } on SocketException {
+      showToast("Connection error");
+      return http.Response("connection error", 503);
+    } on http.ClientException catch (e) {
+      print("🔌 Client error: $e");
+      return http.Response("connection error", 503);
+
   } 
      catch (e) {
       return http.Response(e.toString(), 400);

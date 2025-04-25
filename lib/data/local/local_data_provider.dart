@@ -31,39 +31,48 @@ class LocalDataProvider {
     return movies;
   }
 
-  saveMovie(Movie movie) async {
+  Future<Movie> saveMovie(Movie movie) async {
+    final toAdd = movie.copyWith();
+    toAdd.id = movie.movieId;
     if (isar == null) {
       await initIsar();
     }
-    if (movie.backdropPath != null) {
+    if (toAdd.backdropPath != null) {
       try {
-        movie.backdropPath =
-            await fetchImageFromUrlAndConvertToBase64(movie.backdropPath!);
+        toAdd.backdropPath =
+            await fetchImageFromUrlAndConvertToBase64(toAdd.backdropPath!);
       } catch (e) {
         print("cant convert to image");
-        movie.backdropPath = null;
+        toAdd.backdropPath = null;
       }
     }
-    if (movie.posterPath != null) {
+    if (toAdd.posterPath != null) {
       try {
-        movie.posterPath =
-            await fetchImageFromUrlAndConvertToBase64(movie.posterPath!);
+        toAdd.posterPath =
+            await fetchImageFromUrlAndConvertToBase64(toAdd.posterPath!);
       } catch (e) {
         print("cant convert to image");
-        movie.posterPath = null;
+        toAdd.posterPath = null;
       }
     }
+    print(toAdd);
     await isar!.writeTxn(() async {
-      await isar!.movies.put(movie);
+      await isar!.movies.put(toAdd);
     });
+    return toAdd;
   }
 
   removeMovie(Movie movie) async {
     if (isar == null) {
       await initIsar();
     }
+    final toRemove =
+        await isar!.movies.filter().movieIdEqualTo(movie.movieId).findFirst();
+    if (toRemove == null) {
+      return;
+    }
     await isar!.writeTxn(() async {
-      await isar!.movies.delete(movie.id);
+      await isar!.movies.delete(toRemove.id);
     });
   }
 }

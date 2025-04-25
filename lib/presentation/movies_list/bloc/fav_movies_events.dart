@@ -26,6 +26,11 @@ class InitialFavMovieState extends FavMoviesState {
 class LoadingFavMovieState extends FavMoviesState {
   LoadingFavMovieState({required List<Movie> movies}) : super(movies);
 }
+class SavingToFav extends FavMoviesState {
+  int movieId;
+  SavingToFav({required List<Movie> movies, required this.movieId})
+      : super(movies);
+}
 
 class FetchedFavMovieState extends FavMoviesState {
   FetchedFavMovieState({required List<Movie> movies}) : super(movies);

@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_stage/domain/models/movie.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_bloc.dart';
 import 'package:movies_stage/presentation/movies_list/bloc/fav_movies_events.dart';
+import 'package:movies_stage/presentation/movies_list/bloc/movie_list_events.dart';
+import 'package:movies_stage/presentation/movies_list/bloc/movies_list_bloc.dart';
 import 'package:movies_stage/utils.dart';
 
 class MovieCard extends StatefulWidget {
@@ -31,44 +33,48 @@ class _MovieCardState extends State<MovieCard>
         margin: EdgeInsets.zero,
         child: Stack(
           children: [
-            BlocBuilder<FavMoviesBloc, FavMoviesState>(
-              builder: (context, state) {
-                return state.movies.contains(widget.movie) &&
-                        state is! LoadingFavMovieState
-                    ? Builder(builder: (context) {
-                        if (widget.movie.posterPath == null) {
-                          return Center(
-                              child: Icon(
-                            Icons.error,
-                            color: Colors.grey,
-                          ));
-                        }
-                        try {
-                          String cleanBase64 =
-                              widget.movie.posterPath!.split(',').last;
-                          Uint8List imageBytes = base64Decode(cleanBase64);
-                        return Image.memory(imageBytes);
-                        } catch (e) {
-                          return Text("Some error occurred while saving image!");
-                        }
-
-                      })
-                    : CachedNetworkImage(
-                        imageUrl:
-                            "https://image.tmdb.org/t/p/original${widget.movie.posterPath!}",
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress)),
-                        errorWidget: (context, url, error) => Center(
-                            child: Icon(
-                          Icons.error,
-                          color: Colors.grey,
-                        )),
-                        fit: BoxFit.fill,
-                      );
+            BlocBuilder<MoviesListBloc, MovieListState>(
+              builder: (context, allMoviesState) {
+                return BlocBuilder<FavMoviesBloc, FavMoviesState>(
+                  builder: (context, state) {
+                    return allMoviesState is SwitchToFavState
+                        ? Builder(builder: (context) {
+                            if (widget.movie.posterPath == null) {
+                              return Center(
+                                  child: Icon(
+                                Icons.error,
+                                color: Colors.grey,
+                              ));
+                            }
+                            try {
+                              String cleanBase64 =
+                                  widget.movie.posterPath!.split(',').last;
+                              Uint8List imageBytes = base64Decode(cleanBase64);
+                              return Image.memory(imageBytes);
+                            } catch (e) {
+                              return Text(
+                                  "Some error occurred while saving image!");
+                            }
+                          })
+                        : CachedNetworkImage(
+                            imageUrl:
+                                "https://image.tmdb.org/t/p/original${widget.movie.posterPath ?? ""}",
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => Center(
+                                child: Icon(
+                              Icons.error,
+                              color: Colors.grey,
+                            )),
+                            fit: BoxFit.fill,
+                          );
+                  },
+                );
               },
             ),
+           
             Positioned(
               bottom: 0,
               left: 4,
@@ -101,13 +107,23 @@ class _MovieCardState extends State<MovieCard>
                             : SizedBox(),
                         BlocBuilder<FavMoviesBloc, FavMoviesState>(
                           builder: (context, state) {
+                            if (state is SavingToFav &&
+                                state.movieId == widget.movie.movieId) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator()),
+                              );
+                            }
+
                             return IconButton(
                                 onPressed: () {
-                                  if (state is LoadingFavMovieState) {
-                                    showToast("Please wait...");
-                                    return;
-                                  }
-                                  !state.movies.contains(widget.movie)
+                                  !state.movies
+                                          .map((m) => m.movieId)
+                                          .toList()
+                                          .contains(widget.movie.movieId)
                                       ? context
                                           .read<FavMoviesBloc>()
                                           .add(AddFavMovieEvent(widget.movie))
@@ -115,7 +131,10 @@ class _MovieCardState extends State<MovieCard>
                                           RemoveFavMovieEvent(widget.movie));
                                 },
                                 icon: Icon(
-                                  !state.movies.contains(widget.movie)
+                                  !state.movies
+                                          .map((m) => m.movieId)
+                                          .toList()
+                                          .contains(widget.movie.movieId)
                                       ? Icons.favorite_border_outlined
                                       : Icons.favorite,
                                   color: Colors.red,
